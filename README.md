@@ -47,7 +47,6 @@ b. scripts which expose password directly
 # encoding: UTF-8
 
 require 'net/ssh'
-require 'highline/import'
 
 Net::SSH.start('127.0.0.1', 'user', {:password => 'password'}) { |ssh|
     puts ssh.exec!('cat /etc/*-release')
