@@ -1,0 +1,35 @@
+#!/usr/bin/env ruby
+# encoding: UTF-8
+#
+
+require 'direct_ssh'
+require 'net/ssh'
+
+def usage
+    puts 'usage: direct_ssh user@host [-p port]'
+    puts '  The default port 22 will be used if you leave it off'
+end
+
+def parse_args(argv)
+    raise ArgumentError, 'Invalid argument' unless argv.join(' ') =~ /^([^ ]+)@([^ ]+)( -p ([^ ]+))?$/
+    user = $1
+    host = $2
+    port = ($4 == nil) ? '22' : $4
+    [host, user, port]
+end
+
+def main(argv)
+    host, user, port = parse_args(argv)
+
+    DirectSsh.start(host, user, port) { |ssh|
+        ssh.exec!('cat /etc/*-release')
+        puts 'Direct SSH connected successfully'
+    }
+rescue ArgumentError => e
+    $stderr.puts e.message
+    usage
+rescue Net::SSH::AuthenticationFailed => e
+    $stderr.puts e.message
+end
+
+main(ARGV)
