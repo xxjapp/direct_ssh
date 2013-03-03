@@ -25,35 +25,35 @@ Scripts like these
 a. scripts which ask password everytime
 
 ```ruby
-    #!/usr/bin/env ruby
-    # encoding: UTF-8
-    
-    require 'net/ssh'
-    require 'highline/import'
-    
-    host = '127.0.0.1'
-    user = 'user'
-    
-    options = {}
-    options[:password] = ask("#{user}@#{host}'s password: ") { |q| q.echo = false }
-    
-    Net::SSH.start(host, user, options) { |ssh|
-        puts ssh.exec!('cat /etc/*-release')
-    }
+#!/usr/bin/env ruby
+# encoding: UTF-8
+
+require 'net/ssh'
+require 'highline/import'
+
+host = '127.0.0.1'
+user = 'user'
+
+options = {}
+options[:password] = ask("#{user}@#{host}'s password: ") { |q| q.echo = false }
+
+Net::SSH.start(host, user, options) { |ssh|
+    puts ssh.exec!('cat /etc/*-release')
+}
 ```
 
 b. scripts which expose password directly
 
 ```ruby
-    #!/usr/bin/env ruby
-    # encoding: UTF-8
-    
-    require 'net/ssh'
-    require 'highline/import'
-    
-    Net::SSH.start('127.0.0.1', 'user', {:password => 'password'}) { |ssh|
-        puts ssh.exec!('cat /etc/*-release')
-    }
+#!/usr/bin/env ruby
+# encoding: UTF-8
+
+require 'net/ssh'
+require 'highline/import'
+
+Net::SSH.start('127.0.0.1', 'user', {:password => 'password'}) { |ssh|
+    puts ssh.exec!('cat /etc/*-release')
+}
 ```
 
 can be rewritten like this
@@ -61,14 +61,14 @@ can be rewritten like this
 c. direct_ssh example with block form
 
 ```ruby
-    #!/usr/bin/env ruby
-    # encoding: UTF-8
-    
-    require 'direct_ssh'
-    
-    DirectSsh.start('127.0.0.1', 'user') { |ssh|
-        puts ssh.exec!('cat /etc/*-release')
-    }
+#!/usr/bin/env ruby
+# encoding: UTF-8
+
+require 'direct_ssh'
+
+DirectSsh.start('127.0.0.1', 'user') { |ssh|
+    puts ssh.exec!('cat /etc/*-release')
+}
 ```
 
 or
@@ -76,14 +76,14 @@ or
 d. direct_ssh example without block
 
 ```ruby
-    #!/usr/bin/env ruby
-    # encoding: UTF-8
-    
-    require 'direct_ssh'
-    
-    ssh = DirectSsh.start('127.0.0.1', 'user')
-    puts ssh.exec!('cat /etc/*-release')
-    ssh.close
+#!/usr/bin/env ruby
+# encoding: UTF-8
+
+require 'direct_ssh'
+
+ssh = DirectSsh.start('127.0.0.1', 'user')
+puts ssh.exec!('cat /etc/*-release')
+ssh.close
 ```
 
 ## Contributing
