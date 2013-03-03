@@ -21,7 +21,9 @@ Or install it yourself as:
 ## Usage
 
 Scripts like these
+
 1. scripts which ask password everytime
+
     #!/usr/bin/env ruby
     # encoding: UTF-8
     
@@ -37,7 +39,9 @@ Scripts like these
     Net::SSH.start(host, user, options) { |ssh|
         puts ssh.exec!('cat /etc/*-release')
     }
+
 2. scripts which expose password directly
+
     #!/usr/bin/env ruby
     # encoding: UTF-8
     
@@ -47,8 +51,11 @@ Scripts like these
     Net::SSH.start('127.0.0.1', 'user', {:password => 'password'}) { |ssh|
         puts ssh.exec!('cat /etc/*-release')
     }
-can be rewritted as this
+
+can be rewritten like this
+
 3. direct_ssh example with block form
+
     #!/usr/bin/env ruby
     # encoding: UTF-8
     
@@ -57,8 +64,11 @@ can be rewritted as this
     DirectSsh.start('127.0.0.1', 'user') { |ssh|
         puts ssh.exec!('cat /etc/*-release')
     }
+
 or
+
 4. direct_ssh example without block
+
     #!/usr/bin/env ruby
     # encoding: UTF-8
     
