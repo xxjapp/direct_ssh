@@ -87,6 +87,7 @@ ssh.close
 ## Shell
 
 The direct_ssh shell command checks status of ssh connection to the remote server. It will ask password and send public key to remote server if neccessary.
+
 After ssh connection created successfully, The `cat /etc/*-release` command will be executed.
 
 ```text
