@@ -12,7 +12,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["xxjapp@gmail.com"]
   spec.description   = %q{Create public/private rsa keys if they do not exist and send public key to remote server}
   spec.summary       = %q{Use ssh without the need to enter password everytime}
-  spec.homepage      = %q{http://rubygems.org/gems/direct_ssh}
+  spec.homepage      = %q{https://github.com/xxjapp/direct_ssh}
   spec.license       = "MIT"
 
   spec.files         = `git ls-files`.split($/)
