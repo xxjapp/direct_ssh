@@ -1,8 +1,6 @@
 # DirectSsh
 
-In order to use ssh without the need to enter password everytime,
-this gem will create public/private rsa keys if they do not exist
-and send public key to remote server
+In order to use ssh without the need to enter password everytime, this gem will create public/private rsa keys if they do not exist and send public key to remote server
 
 ## Installation
 
@@ -84,6 +82,16 @@ require 'direct_ssh'
 ssh = DirectSsh.start('127.0.0.1', 'user')
 puts ssh.exec!('cat /etc/*-release')
 ssh.close
+```
+
+## Shell
+
+The direct_ssh shell command checks status of ssh connection to the remote server. It will ask password and send public key to remote server if neccessary.
+After ssh connection created successfully, The `cat /etc/*-release` command will be executed.
+
+```text
+Usage: direct_ssh user@host [-p port]
+ - default port 22 will be used if you leave it off
 ```
 
 ## Contributing

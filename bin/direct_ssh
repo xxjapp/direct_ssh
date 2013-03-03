@@ -6,8 +6,8 @@ require 'direct_ssh'
 require 'net/ssh'
 
 def usage
-    puts 'usage: direct_ssh user@host [-p port]'
-    puts '  The default port 22 will be used if you leave it off'
+    puts 'Usage: direct_ssh user@host [-p port]'
+    puts ' - default port 22 will be used if you leave it off'
 end
 
 def parse_args(argv)
