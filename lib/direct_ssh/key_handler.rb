@@ -3,7 +3,7 @@
 #
 
 module KeyHandler
-    def send_key_to_remote(ssh)
+    def self.send_key_to_remote(ssh)
         ssh_public_key = get_ssh_public_key
         send_ssh_public_key_to_remote(ssh, ssh_public_key)
     end
@@ -12,7 +12,7 @@ module KeyHandler
     # local ssh key process
 
     # get public key, create it if not exists
-    def get_ssh_public_key
+    def self.get_ssh_public_key
         if !File.exists?(Dir.home + '/.ssh/id_rsa.pub')
             create_ssh_files
             chmod_ssh_files
@@ -29,7 +29,7 @@ module KeyHandler
         IO.read(Dir.home + '/.ssh/id_rsa.pub')
     end
 
-    def create_ssh_files
+    def self.create_ssh_files
         FileUtils.mkdir_p Dir.home + '/.ssh'
         FileUtils.touch   Dir.home + '/.ssh/id_rsa'
         FileUtils.touch   Dir.home + '/.ssh/id_rsa.pub'
@@ -38,7 +38,7 @@ module KeyHandler
     end
 
     # see: http://www.noah.org/wiki/SSH_public_keys
-    def chmod_ssh_files
+    def self.chmod_ssh_files
         FileUtils.chmod 0700, Dir.home + '/.ssh'
         FileUtils.chmod 0600, Dir.home + '/.ssh/id_rsa'
         FileUtils.chmod 0644, Dir.home + '/.ssh/id_rsa.pub'
@@ -47,7 +47,7 @@ module KeyHandler
     end
 
     # see: http://www.rubydoc.info/github/delano/rye/Rye/Key.public_key_to_ssh2
-    def get_public_key(public_key)
+    def self.get_public_key(public_key)
         authtype = public_key.class.to_s.split('::').last.downcase
         b64pub   = Base64.encode64(public_key.to_blob).strip.gsub(/[\r\n\t ]/, '')
         user     = ENV['USER']
@@ -59,7 +59,7 @@ module KeyHandler
     ################################################################
     # remote ssh key process
 
-    def send_ssh_public_key_to_remote(ssh, key)
+    def self.send_ssh_public_key_to_remote(ssh, key)
         if !remote_file_exists?(ssh, '~/.ssh/authorized_keys')
             remote_create_ssh_files(ssh)
             remote_chmod_ssh_files(ssh)
@@ -69,11 +69,11 @@ module KeyHandler
         ssh.exec!("echo '#{key}' >> ~/.ssh/authorized_keys")
     end
 
-    def remote_file_exists?(ssh, path)
+    def self.remote_file_exists?(ssh, path)
         ssh.exec!("[ ! -f #{path} ] && echo NOT_EXIST") == nil
     end
 
-    def remote_create_ssh_files(ssh)
+    def self.remote_create_ssh_files(ssh)
         ssh.exec!('mkdir -p ~/.ssh')
         ssh.exec!('touch    ~/.ssh/id_rsa')
         ssh.exec!('touch    ~/.ssh/id_rsa.pub')
@@ -82,7 +82,7 @@ module KeyHandler
     end
 
     # see: http://www.noah.org/wiki/SSH_public_keys
-    def remote_chmod_ssh_files(ssh)
+    def self.remote_chmod_ssh_files(ssh)
         ssh.exec!('chmod 700 ~/.ssh')
         ssh.exec!('chmod 600 ~/.ssh/id_rsa')
         ssh.exec!('chmod 644 ~/.ssh/id_rsa.pub')

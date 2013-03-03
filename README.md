@@ -1,6 +1,8 @@
 # DirectSsh
 
-TODO: Write a gem description
+In order to use ssh without the need to enter password everytime,
+this gem will create public/private rsa keys if they do not exist
+and send public key to remote server
 
 ## Installation
 

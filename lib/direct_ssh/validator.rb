@@ -2,15 +2,18 @@
 # encoding: UTF-8
 #
 
-module Validator
+require 'net/ssh'
+require 'highline/import'
+
+class Validator
     attr_reader :direct
 
     def initialize
         @direct = true
     end
 
-    def start(host, user, options={}, &block)
-        return Net::SSH.start(host, user, options, block)
+    def start(host, user, options={})
+        return Net::SSH.start(host, user, options)
     rescue Net::SSH::AuthenticationFailed
         @direct = false
 
@@ -18,7 +21,7 @@ module Validator
             options[:password] = ask("#{user}@#{host}'s password: ") { |q| q.echo = false }
 
             begin
-                return Net::SSH.start(host, user, options, block)
+                return Net::SSH.start(host, user, options)
             rescue Net::SSH::AuthenticationFailed
             end
         }
