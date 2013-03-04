@@ -101,3 +101,9 @@ Usage: direct_ssh user@host [-p port]
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
+
+## Links
+
+1. ruby gem [net-ssh](https://rubygems.org/gems/net-ssh)
+2. ruby gem [highline](https://rubygems.org/gems/highline)
+3. ruby gem [direct_ssh](https://rubygems.org/gems/direct_ssh)
