@@ -1,0 +1,122 @@
+#!/usr/bin/env ruby
+# encoding: UTF-8
+
+require 'direct_ssh'
+require 'net/ssh'
+require 'net/scp'
+
+def usage
+    puts 'Usage:'
+    puts '1) upload file to remote server'
+    puts ' # direct_scp [-r] [-p port] local_file user@host:remote_file'
+    puts '2) download file from remote server'
+    puts ' # direct_scp [-r] [-p port] user@host:remote_file local_file'
+    puts '3) print this message'
+    puts ' # direct_scp -h'
+    puts
+    puts 'default port 22 will be used if you leave it off'
+end
+
+def parse_args(argv)
+    if argv[0] == '-h'
+        usage; exit
+    end
+
+    @recursive = false
+    @port      = 22
+
+    0.upto(argv.length - 3) { |i|
+        @recursive = true        if argv[i] == '-r'
+        @port      = argv[i + 1] if argv[i] == '-p'
+    }
+
+    argv[-2] =~ /((.*)@(.*):)?(.*)/
+    @user = $2 if $2 != nil
+    @host = $3 if $3 != nil
+    @download = ($2 != nil && $3 != nil)
+    @src_file = $4
+
+    argv[-1] =~ /((.*)@(.*):)?(.*)/
+    @user = $2 if $2 != nil
+    @host = $3 if $3 != nil
+    @upload = ($2 != nil && $3 != nil)
+    @dst_file = $4
+
+    raise ArgumentError, 'Invalid argument' if !@user || !@host || !@src_file || !@dst_file || !@download && !@upload
+end
+
+def terminal_width
+    HighLine::SystemExtensions.terminal_size[0]
+end
+
+def limit_string(str, max_length)
+    if max_length >= str.length
+        return str
+    elsif max_length > 2
+        return '..' + str[str.length - max_length + 2, max_length - 2]
+    else
+        return '..'
+    end
+end
+
+MIN_MAX_DOT_LENGTH = 5
+
+def scp_progress_info(file, sent, total)
+    if total != 0
+        percent = sent.to_f / total.to_f
+    else
+        percent = 1
+    end
+
+    if @upload
+        string1 = " upload - #{file} "
+    else
+        string1 = " download - #{file} "
+    end
+
+    string3 = sprintf("%4d%%", percent * 100)
+
+    max_dot_length = terminal_width - 2 - (string1 + string3).length
+
+    if max_dot_length < MIN_MAX_DOT_LENGTH
+        limit_file = limit_string(file, file.length - MIN_MAX_DOT_LENGTH + max_dot_length)
+        return scp_progress_info(limit_file, sent, total)
+    end
+
+    dot_string = '-' * (percent * max_dot_length).ceil + '>' + ' ' * ((1 - percent) * max_dot_length).floor
+    return string1 + dot_string + string3
+end
+
+def show_transfer_progress(old_file, file, sent, total)
+    puts if file != old_file && old_file != nil
+    print "\r" + scp_progress_info(file, sent, total)
+    return file
+end
+
+def main(argv)
+    parse_args(argv)
+
+    DirectSsh.start(@host, @user, {:port => @port}) { |ssh|
+        old_file = nil
+
+        if @upload
+            ssh.scp.upload!(@src_file, @dst_file, {:recursive => @recursive}) { |ch, file, sent, total|
+                old_file = show_transfer_progress(old_file, file, sent, total)
+            }
+        else
+            ssh.scp.download!(@src_file, @dst_file, {:recursive => @recursive}) { |ch, file, sent, total|
+                old_file = show_transfer_progress(old_file, file, sent, total)
+            }
+        end
+    }
+rescue ArgumentError => e
+    $stderr.puts e.message
+    puts
+    usage
+rescue Net::SSH::AuthenticationFailed => e
+    $stderr.puts e.message
+rescue Net::SCP::Error => e
+    $stderr.puts e.message
+end
+
+main(ARGV)

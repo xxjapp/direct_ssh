@@ -85,13 +85,27 @@ ssh.close
 
 ## Shell
 
-The direct_ssh shell command checks status of ssh connection to the remote server. It will ask password and send public key to remote server if neccessary.
+The `direct_ssh` shell command checks status of ssh connection to the remote server. It will ask password and send public key to remote server if neccessary.
 
 After ssh connection created successfully, The `cat /etc/*-release` command will be executed.
 
 ```text
 Usage: direct_ssh user@host [-p port]
  - default port 22 will be used if you leave it off
+```
+
+The `direct_scp` shell command uses direct_ssh to upload or download files.
+
+```text
+Usage:
+1) upload file to remote server
+ # direct_scp [-r] [-p port] local_file user@host:remote_file
+2) download file from remote server
+ # direct_scp [-r] [-p port] user@host:remote_file local_file
+3) print this message
+ # direct_scp -h
+
+default port 22 will be used if you leave it off
 ```
 
 ## Contributing
