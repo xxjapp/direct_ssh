@@ -5,7 +5,7 @@ require 'direct_ssh'
 require 'net/ssh'
 
 def usage
-    puts 'Usage: direct_ssh user@host [-p port]'
+    puts 'Usage: simple_ssh user@host [-p port]'
     puts ' - default port 22 will be used if you leave it off'
 end
 
@@ -17,12 +17,25 @@ def parse_args(argv)
     [host, user, port]
 end
 
+def ssh_exec!(ssh, cmd)
+    ssh.exec!(cmd) { |channel, stream, data|
+        $stdout.print data.force_encoding("UTF-8") if stream == :stdout
+        $stderr.print data.force_encoding("UTF-8") if stream == :stderr
+    }
+end
+
 def main(argv)
     host, user, port = parse_args(argv)
 
     DirectSsh.start(host, user, {:port => port}) { |ssh|
-        puts ssh.exec!('cat /etc/*-release')
-        puts 'Direct SSH connected successfully'
+        puts host + ' - ' + ssh.exec!('cat /etc/*-release')
+
+        input = ''
+        until input == 'exit0'
+            print '# '
+            input = $stdin.gets.chomp
+            ssh_exec!(ssh, input) if input != 'exit0'
+        end
     }
 rescue ArgumentError => e
     $stderr.puts e.message
