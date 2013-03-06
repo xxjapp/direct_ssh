@@ -31,10 +31,10 @@ def main(argv)
         puts host + ' - ' + ssh.exec!('cat /etc/*-release')
 
         input = ''
-        until input == 'exit0'
+        until input == 'exit'
             print '# '
             input = $stdin.gets.chomp
-            ssh_exec!(ssh, input) if input != 'exit0'
+            ssh_exec!(ssh, input) if input != 'exit'
         end
     }
 rescue ArgumentError => e
