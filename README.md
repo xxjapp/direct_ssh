@@ -1,6 +1,6 @@
 # DirectSsh
 
-In order to use ssh without the need to enter password every time, this gem will create public/private rsa keys if they do not exist and send public key to remote server
+In order to use SSH or SCP without the need to enter password every time, this gem will create public/private ssh rsa keys if they do not exist and send public key to remote server automatically only if necessary.
 
 ## Installation
 
