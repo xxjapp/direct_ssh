@@ -1,6 +1,6 @@
 # DirectSsh
 
-In order to use ssh without the need to enter password everytime, this gem will create public/private rsa keys if they do not exist and send public key to remote server
+In order to use ssh without the need to enter password every time, this gem will create public/private rsa keys if they do not exist and send public key to remote server
 
 ## Installation
 
@@ -16,11 +16,11 @@ Or install it yourself as:
 
     $ gem install direct_ssh
 
-## Usage
+## Original Style Examples
 
 Scripts like these
 
-a. scripts which ask password everytime
+a. scripts which ask password every time
 
 ```ruby
 #!/usr/bin/env ruby
@@ -53,7 +53,9 @@ Net::SSH.start('127.0.0.1', 'user', {:password => 'password'}) { |ssh|
 }
 ```
 
-can be rewritten like this
+can be rewritten like examples in **DirectSsh Style SSH Examples**.
+
+## DirectSsh Style SSH Examples
 
 c. direct_ssh example with block form
 
@@ -83,9 +85,38 @@ puts ssh.exec!('cat /etc/*-release')
 ssh.close
 ```
 
-## Shell
+## DirectSsh Style SCP Examples
 
-The `direct_ssh` shell command checks status of ssh connection to the remote server. It will ask password and send public key to remote server if neccessary.
+e. direct_ssh scp example
+
+```ruby
+#!/usr/bin/env ruby
+# encoding: UTF-8
+
+require 'direct_ssh'
+require 'net/scp'
+
+local_path = __FILE__
+file_name  = File.basename(local_path)
+
+DirectSsh.start('127.0.0.1', 'user', {:port => 22}) { |ssh|
+    # check whether this script file already exists on remote server
+    puts ssh.exec!("ls -l /tmp/#{file_name}")
+
+    # upload this script file to '/tmp' of remote server
+    ssh.scp.upload!(local_path, '/tmp')
+
+    # check again whether this script file already exists on remote server
+    puts ssh.exec!("ls -l /tmp/#{file_name}")
+
+    # download remote file and save it using another name
+    ssh.scp.download!("/tmp/#{file_name}", "./#{file_name}.download")
+}
+```
+
+## Shell Commands
+
+The `direct_ssh` shell command checks status of ssh connection to the remote server. It will ask password and send public key to remote server if necessary.
 
 After ssh connection created successfully, The `cat /etc/*-release` command will be executed.
 
