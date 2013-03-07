@@ -53,7 +53,7 @@ Net::SSH.start('127.0.0.1', 'user', {:password => 'password'}) { |ssh|
 }
 ```
 
-can be rewritten like examples in [**DirectSsh Style SSH Examples**](https://github.com/xxjapp/direct_ssh#directssh-style-ssh-examples).
+can be rewritten like examples in [**DirectSsh Style SSH Examples**](#directssh-style-ssh-examples).
 
 ## DirectSsh Style SSH Examples
 
