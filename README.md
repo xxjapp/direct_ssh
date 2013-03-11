@@ -150,5 +150,6 @@ default port 22 will be used if you leave it off
 ## Links
 
 1. ruby gem [net-ssh](https://rubygems.org/gems/net-ssh)
-2. ruby gem [highline](https://rubygems.org/gems/highline)
-3. ruby gem [direct_ssh](https://rubygems.org/gems/direct_ssh)
+2. ruby gem [net-scp](https://rubygems.org/gems/net-scp)
+3. ruby gem [highline](https://rubygems.org/gems/highline)
+4. ruby gem [direct_ssh](https://rubygems.org/gems/direct_ssh)
