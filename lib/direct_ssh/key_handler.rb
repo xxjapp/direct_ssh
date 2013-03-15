@@ -1,6 +1,8 @@
 #!/usr/bin/env ruby
 # encoding: UTF-8
-#
+
+require 'fileutils'
+require 'base64'
 
 module KeyHandler
     def self.send_key_to_remote(ssh)
