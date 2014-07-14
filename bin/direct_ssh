@@ -5,15 +5,18 @@ require 'direct_ssh'
 require 'net/ssh'
 
 def usage
-    puts 'Usage: direct_ssh user@host [-p port]'
+    puts 'Usage: direct_ssh [user@]host [-p port]'
     puts ' - default port 22 will be used if you leave it off'
+    puts ' - current user will be used if you leave it off'
 end
 
 def parse_args(argv)
-    raise ArgumentError, 'Invalid argument' unless argv.join(' ') =~ /^([^ ]+)@([^ ]+)( -p ([^ ]+))?$/
-    user = $1
-    host = $2
-    port = ($4 == nil) ? '22' : $4
+    raise ArgumentError, 'Invalid argument' unless argv.join(' ') =~ /^(([^ ]+)@)?([^ ]+)( -p ([^ ]+))?$/
+
+    user = $2 ? $2 : ENV['USER']
+    host = $3
+    port = $5 ? $5 : '22'
+
     [host, user, port]
 end
 
