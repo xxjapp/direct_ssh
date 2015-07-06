@@ -20,8 +20,8 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ["lib"]
 
-  spec.add_runtime_dependency "net-ssh"
-  spec.add_runtime_dependency "net-scp"
+  spec.add_runtime_dependency "net-ssh", "~> 2.6"
+  spec.add_runtime_dependency "net-scp", "~> 1.1"
   spec.add_runtime_dependency "highline"
 
   spec.add_development_dependency "bundler", "~> 1.3"
