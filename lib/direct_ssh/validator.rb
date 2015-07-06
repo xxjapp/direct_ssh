@@ -13,6 +13,7 @@ class Validator
     end
 
     def start(host, user, options={})
+        options[:auth_methods] = ["publickey"]
         return Net::SSH.start(host, user, options)
     rescue Net::SSH::AuthenticationFailed
         @direct = false
@@ -21,6 +22,7 @@ class Validator
             options[:password] = ask("#{user}@#{host}'s password: ") { |q| q.echo = false }
 
             begin
+                options[:auth_methods] = ["password"]
                 return Net::SSH.start(host, user, options)
             rescue Net::SSH::AuthenticationFailed
             end
