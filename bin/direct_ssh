@@ -32,6 +32,8 @@ rescue ArgumentError => e
     usage
 rescue Net::SSH::AuthenticationFailed => e
     $stderr.puts e.message
+rescue SocketError => e
+    $stderr.puts e.message
 end
 
 main(ARGV)
