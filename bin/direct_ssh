@@ -24,8 +24,7 @@ def main(argv)
     host, user, port = parse_args(argv)
 
     DirectSsh.start(host, user, {:port => port}) { |ssh|
-        puts ssh.exec!('cat /etc/*-release')
-        puts 'Direct SSH connected successfully'
+        system "ssh #{user}@#{host} -p #{port}"
     }
 rescue ArgumentError => e
     $stderr.puts e.message
