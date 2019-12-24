@@ -72,7 +72,7 @@ module KeyHandler
     end
 
     def self.remote_file_exists?(ssh, path)
-        ssh.exec!("[ ! -f #{path} ] && echo NOT_EXIST") == nil
+        ssh.exec!("[ ! -f #{path} ] && echo NOT_EXIST").empty?
     end
 
     def self.remote_create_ssh_files(ssh)
