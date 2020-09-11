@@ -32,7 +32,7 @@ module KeyHandler
     end
 
     def self.create_ssh_files
-        FileUtils.mkdir Dir.home + '/.ssh'
+        FileUtils.mkdir_p Dir.home + '/.ssh'
         FileUtils.touch Dir.home + '/.ssh/id_rsa'
         FileUtils.touch Dir.home + '/.ssh/id_rsa.pub'
         FileUtils.touch Dir.home + '/.ssh/authorized_keys'
